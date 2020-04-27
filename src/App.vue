@@ -7,34 +7,42 @@
 </template>
 
 <script>
-import { defineComponent, ref } from '@vue/composition-api'
+import { defineComponent, ref } from "@vue/composition-api";
 
 export default defineComponent({
-  setup(){
-    const cordovaReady = ref(false)
-    function cordovaInit(){
-      cordovaReady.value = true
+  setup() {
+    const cordovaReady = ref(false);
+    function cordovaInit() {
+      const permissions = cordova.plugins.permissions; // eslint-disable-line
+
+      permissions.requestPermissions(
+        [permissions.CAMERA, permissions.RECORD_AUDIO],
+        () => {
+          cordovaReady.value = true;
+        }
+      );
     }
 
     document.addEventListener("deviceready", cordovaInit, false);
 
     return {
-      cordovaReady
-    }
-  }
-})
+      cordovaReady,
+    };
+  },
+});
 </script>
 
 <style lang="scss">
-html,body{
+html,
+body {
   overscroll-behavior-y: none;
   padding: 0;
   margin: 0;
-  *{
+  * {
     outline: none;
   }
 }
-#app{
+#app {
   padding: 10px;
   font-size: 20px;
   color: #707070;
